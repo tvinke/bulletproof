@@ -1,0 +1,65 @@
+apply plugin: 'groovy'
+apply plugin: 'jacoco'
+apply plugin: 'maven'
+apply plugin: 'project-report'
+
+group = 'com.github.tvinke'
+archivesBaseName = 'bulletproof'
+version = '0.1-SNAPSHOT'
+
+jar.archiveName = "bulletproof-${version}.jar"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.9'
+
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from groovydoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+jacoco {
+    toolVersion = '0.7.9'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html {
+            enabled true
+            destination "${buildDir}/reports/jacoco"
+        }
+    }
+}
+
+groovydoc {
+    // Set document and window titles.
+    docTitle = "Bulletproof"
+    windowTitle = "Bulletproof $version API"
+    use = false
+
+    header = """\
+        <h2>Bulletproof API $version</h2>
+        """.stripIndent()
+     
+    footer = """\
+        <div class="custom-footer">
+            Generated on: ${new Date().format('yyyy-MM-dd HH:mm:ss')}
+        </div>""".stripIndent()
+}
