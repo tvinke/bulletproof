@@ -1,6 +1,8 @@
 # Bulletproof
 *Groovy AST transformations, such as @Value and @NonNull, which makes constructing an instance more bullet-proof.* 
 
+![bulletproof logo](https://raw.githubusercontent.com/tvinke/bulletproof/master/logo.png)
+
 Groovy has the `Immutable` annotation which allows to create immutable classes, which is a prerequisite for creating [value objects](https://en.wikipedia.org/wiki/Value_object). Unfortunately, when a class has been annotated with `Immutable` it's no longer possible to add your own constructor to verify if provided parameters are not `null`, making our value objects really bullet-proof.
 
 Bulletproof helps to fill this gap by adding a few AST transformations.
