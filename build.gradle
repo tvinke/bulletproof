@@ -1,6 +1,7 @@
 apply plugin: 'groovy'
 apply plugin: 'jacoco'
 apply plugin: 'maven'
+apply plugin: 'signing'
 apply plugin: 'project-report'
 
 group = 'com.github.tvinke'
@@ -33,6 +34,12 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
+if (project.hasProperty('sign')) {
+    signing {
+        sign configurations.archives
+    }
+}
+
 jacoco {
     toolVersion = '0.7.9'
 }
@@ -62,4 +69,49 @@ groovydoc {
         <div class="custom-footer">
             Generated on: ${new Date().format('yyyy-MM-dd HH:mm:ss')}
         </div>""".stripIndent()
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      if (project.hasProperty('sign')) {
+          beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+      }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
+      }
+
+      pom.project {
+        name 'bulletproof'
+        packaging 'jar'
+        description 'Groovy AST transformations, such as @Value and @NonNull, which makes constructing an instance more bullet-proof'
+        url 'https://github.com/tvinke/bulletproof'
+
+        scm {
+          connection 'scm:git:git://github.com//tvinke/bulletproof.git'
+          developerConnection 'scm:git:ssh://github.com:tvinke/bulletproof.git'
+          url 'https://github.com/tvinke/bulletproof/tree/master'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+
+        developers {
+          developer {
+            id 'tvinke'
+            name 'Ted Vinke'
+          }
+        }
+      }
+    }
+  }
 }
