@@ -165,7 +165,6 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
         
         MethodNode methodNode = buildMethodFromString(methodName, """
                 void ${methodName}($propType value) {
-                    println "Inside ${methodName}"
                     if (value == null) {
                         throw new IllegalArgumentException(\"$propNameCap can not be null\")
                     }
