@@ -1,5 +1,6 @@
+[![Travis CI](https://img.shields.io/travis/tvinke/bulletproof.svg)](https://travis-ci.org/tvinke/bulletproof)
 # Bulletproof
-*Groovy AST transformations, such as @Value and @NonNull, which makes constructing an instance more bullet-proof.* 
+*Groovy AST transformations, such as @Value and @NonNull, which makes constructing an instance more bullet-proof.*
 
 ![bulletproof logo](https://raw.githubusercontent.com/tvinke/bulletproof/master/logo.png)
 
