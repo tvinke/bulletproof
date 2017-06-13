@@ -1,4 +1,6 @@
 [![Travis CI](https://img.shields.io/travis/tvinke/bulletproof.svg)](https://travis-ci.org/tvinke/bulletproof)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.tvinke/bulletproof.svg)](http://repo1.maven.org/maven2/com/github/tvinke/bulletproof/0.1/bulletproof-0.1.jar)
+[![GitHub release](https://img.shields.io/github/tag/tvinke/bulletproof.svg)](https://github.com/tvinke/bulletproof/releases/tag/v0.1)
 # Bulletproof
 *Groovy AST transformations, such as @Value and @NonNull, which makes constructing an instance more bullet-proof.*
 
@@ -11,10 +13,39 @@ Bulletproof helps to fill this gap by adding a few AST transformations.
  * The `Value` meta-annotation which puts both `NonNull` and `Immutable` on your class as a convenience to do above step with one annotation.
 
 ## Contents
+ * [Prerequisites](#prerequisites)
+ * [Installation](#installation)
  * [Annotations](#annotations)
    * [@NonNull](#nonnull)
    * [@Value](#value)
  * [Future Changes](#future-changes)
+
+## Prerequisites
+
+Bulletproof requires Java 7 or later.
+
+## Installation
+
+Add the bulletproof jar to the classpath in your preferred way and you're set.
+
+### Grape
+```groovy
+@Grab('com.github.tvinke:bulletproof:0.1') 
+```
+
+### Gradle
+```groovy
+compile group: 'com.github.tvinke', name: 'bulletproof', version: '0.1'
+```
+
+### Maven
+```xml
+ <dependency>
+    <groupId>com.github.tvinke</groupId>
+    <artifactId>bulletproof</artifactId>
+    <version>0.1</version>
+</dependency>
+```
 
 ## Annotations
 
