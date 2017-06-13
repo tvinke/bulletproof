@@ -7,6 +7,7 @@ import org.codehaus.groovy.GroovyBugError
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.AnnotatedNode
 import org.codehaus.groovy.ast.AnnotationNode
+import org.codehaus.groovy.ast.ClassHelper
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.ConstructorNode
 import org.codehaus.groovy.ast.MethodNode
@@ -132,9 +133,17 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
     }
     
     private static List<MethodNode> createCheckMethods(List<PropertyNode> properties) {
-        properties.collect { prop ->
-            createCheckMethod(prop)
+        properties
+            .findAll { prop ->
+                shouldCreateCheckMethod(prop)
+            }
+            .collect { prop ->
+                createCheckMethod(prop)
         }
+    }
+    
+    private static boolean shouldCreateCheckMethod(PropertyNode propertyNode) {
+        !ClassHelper.isPrimitiveType(propertyNode.type)
     }
     
     private static MethodNode createCheckMethod(PropertyNode propertyNode) {

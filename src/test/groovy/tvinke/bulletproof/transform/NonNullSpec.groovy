@@ -96,6 +96,28 @@ class NonNullSpec extends GroovyShellSpec {
         ex.message == 'Age can not be null'
     }
     
+    @IgnoreRest
+    def "@NonNull and @Immutable tuple constructor should not check null for primitive types"() {
+        when:
+        def person = evaluate("""
+            import tvinke.bulletproof.transform.NonNull
+            import groovy.transform.Immutable
+            @Immutable
+            @NonNull
+            class Person {
+                String name
+                int age /* primitive */
+            }
+            new Person(name: 'Ted') 
+        """)
+
+        then:
+        person.age == 0
+        
+        and: "no null-checker is generated"
+        !person.class.methods.any { it.name == 'checkNonNullAge' }
+    }
+    
     def "@NonNull and @Immutable Map constructor should fail on first null values"() {
         when:
         def person = evaluate("""
