@@ -6,7 +6,7 @@ apply plugin: 'project-report'
 
 group = 'com.github.tvinke'
 archivesBaseName = 'bulletproof'
-version = '0.1'
+version = '0.2-SNAPSHOT'
 
 jar.archiveName = "bulletproof-${version}.jar"
 
