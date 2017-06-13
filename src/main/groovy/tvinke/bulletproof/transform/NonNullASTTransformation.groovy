@@ -51,8 +51,6 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
         init(nodes, source);
         AnnotatedNode parent = (AnnotatedNode) nodes[1];
         AnnotationNode annotation = (AnnotationNode) nodes[0];
-        println("parent: " + parent.getClass());
-        println("annotation: " + annotation);
         if (parent instanceof ClassNode) {
             modifyClass(parent);
         } else {
@@ -72,30 +70,21 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
         // no processing if existing constructors found
         
         List<ConstructorNode> constructors = classNode.getDeclaredConstructors();
-        System.out.println("constructors.size: " + constructors.size());
         
         if (constructors.size() > 1 && !force) return;
         boolean foundEmpty = constructors.size() == 1 && constructors.get(0).getFirstStatement() == null;
-        System.out.println("foundEmpty: " + foundEmpty);
         
         // proceed by adjusting class
         final List<PropertyNode> properties = getInstanceProperties(classNode);
         boolean specialHashMapCase = properties.size() == 1 && properties.get(0).getField().getType().equals(HASHMAP_TYPE);
-        println "specialHashMapCase: $specialHashMapCase"
         
         final List<MethodNode> addedMethods = createCheckMethods(properties)
         addUberCheckMethodToClass(classNode, createUberCheckerMethod(addedMethods))
         addCheckMethodsToClass(classNode, addedMethods)
         
-        if (hasImmutableAnnotation(classNode)) {
-            println "We have @Immutable"
-        }
-        
         if (constructors) {
             haveConstructorsCallUberChecker(classNode, createUberCheckerStatement())
         }
-        
-        println "Done."
     }
     
     @CompileStatic(TypeCheckingMode.SKIP)
@@ -105,20 +94,13 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
     
     private void haveConstructorsCallUberChecker(ClassNode classNode, Statement uberCheckerCallingStatement) {
         for (ConstructorNode constructor : classNode.getDeclaredConstructors()) {
-            println "--> Now append uber checker call to end of constructor ($constructor.modifiers)$constructor"
             def code = constructor.getCode()
-            println "code from ctor: $code"
             if (constructor.code instanceof BlockStatement) {
-                println "Ctor is a BlockStatement: $constructor.code"
                 List<Statement> existingStatements = ((BlockStatement)constructor.code).getStatements();
-                println "Existing statements before: " + existingStatements.size()
                 existingStatements.add uberCheckerCallingStatement
-                println "Existing statements after : " + existingStatements.size()
             } else if (constructor.code instanceof ExpressionStatement) {
-                println "Ctor is a ExpressionStatement: $constructor.code"
-                //((ExpressionStatement)constructor.code)
+                // no-op
             } else {
-                println "Ctor is unknown: $constructor"
                 addError("@NonNull fails to determine the correct constructor", classNode)
             }
         }
@@ -161,8 +143,6 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
         String propType = propertyNode.getType().getName()
         String methodName = "checkNonNull${propNameCap}"
         
-        println "Creating method: " + methodName
-        
         MethodNode methodNode = buildMethodFromString(methodName, """
                 void ${methodName}($propType value) {
                     if (value == null) {
@@ -183,9 +163,7 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
             append "}"
         }
         final def nodes = new AstBuilder().buildFromString(sb.toString())
-        //println "created nodes: $nodes"
         MethodNode createdMethod = (MethodNode) ((ClassNode)nodes[1]).methods[0].find { MethodNode mn -> mn.name == methodName }
-        //println "created method: $createdMethod"
         createdMethod
     }
     
