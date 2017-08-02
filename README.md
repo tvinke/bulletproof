@@ -10,7 +10,7 @@ Groovy has the `Immutable` annotation which allows to create immutable classes, 
 
 Bulletproof helps to fill this gap by adding a few AST transformations.
  * The `NonNull` annotation which modifies every constructor to perform null-checks. Add this to an `Immutable` class and no `null` slips past your constructor.
- * The `Value` meta-annotation which puts both `NonNull` and `Immutable` on your class as a convenience to do above step with one annotation.
+ * The `ValueObject` meta-annotation which puts both `NonNull` and `Immutable` on your class as a convenience to do above step with one annotation.
 
 ## Contents
  * [Prerequisites](#prerequisites)
