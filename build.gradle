@@ -89,7 +89,7 @@ uploadArchives {
       pom.project {
         name 'bulletproof'
         packaging 'jar'
-        description 'Groovy AST transformations, such as @Value and @NonNull, which makes constructing an instance more bullet-proof'
+        description 'Groovy AST transformations, such as @ValueObject and @NonNull, which makes constructing an instance more bullet-proof'
         url 'https://github.com/tvinke/bulletproof'
 
         scm {
