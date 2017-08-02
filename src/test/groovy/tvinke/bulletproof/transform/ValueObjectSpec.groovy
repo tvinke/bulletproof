@@ -2,13 +2,13 @@ package tvinke.bulletproof.transform
 
 import spock.lang.*
 
-class ValueSpec extends GroovyShellSpec {
+class ValueObjectSpec extends GroovyShellSpec {
 
-    def "@Value uses @NonNull to prevent object instantiated with a null value"() {
+    def "@ValueObject uses @NonNull to prevent object instantiated with a null value"() {
         when:
         def money = evaluate("""
-            import tvinke.bulletproof.transform.Value
-            @Value
+            import tvinke.bulletproof.transform.ValueObject
+            @ValueObject
             class Money {
                 BigDecimal amount
             }
@@ -20,11 +20,11 @@ class ValueSpec extends GroovyShellSpec {
         ex.message == 'Amount can not be null'
     }
     
-    def "@Value uses @Immutable to prevent mutating an object after creation"() {
+    def "@ValueObject uses @Immutable to prevent mutating an object after creation"() {
         given:
         def money = evaluate("""
-            import tvinke.bulletproof.transform.Value
-            @Value
+            import tvinke.bulletproof.transform.ValueObject
+            @ValueObject
             class Money {
                 BigDecimal amount
             }
@@ -38,11 +38,11 @@ class ValueSpec extends GroovyShellSpec {
         thrown(ReadOnlyPropertyException)
     }
     
-    def "@Value can have settings passed to @Immutable"() {
+    def "@ValueObject can have settings passed to @Immutable"() {
         when:
         def address = evaluate("""
-            import tvinke.bulletproof.transform.Value
-            @Value(copyWith=true)
+            import tvinke.bulletproof.transform.ValueObject
+            @ValueObject(copyWith=true)
             class Address {
                 String street
                 String number

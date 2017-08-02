@@ -96,7 +96,6 @@ class NonNullSpec extends GroovyShellSpec {
         ex.message == 'Age can not be null'
     }
     
-    @IgnoreRest
     def "@NonNull and @Immutable tuple constructor should not check null for primitive types"() {
         when:
         def person = evaluate("""

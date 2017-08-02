@@ -2,7 +2,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.tvinke/bulletproof.svg)](http://repo1.maven.org/maven2/com/github/tvinke/bulletproof/0.1/bulletproof-0.1.jar)
 [![GitHub release](https://img.shields.io/github/tag/tvinke/bulletproof.svg)](https://github.com/tvinke/bulletproof/releases/tag/v0.1)
 # Bulletproof
-*Groovy AST transformations, such as @Value and @NonNull, which makes constructing an instance more bullet-proof.*
+*Groovy AST transformations, such as @ValueObject and @NonNull, which makes constructing an instance more bullet-proof.*
 
 ![bulletproof logo](https://raw.githubusercontent.com/tvinke/bulletproof/master/logo.png)
 
@@ -17,7 +17,7 @@ Bulletproof helps to fill this gap by adding a few AST transformations.
  * [Installation](#installation)
  * [Annotations](#annotations)
    * [@NonNull](#nonnull)
-   * [@Value](#value)
+   * [@ValueObject](#value-object)
  * [Future Changes](#future-changes)
 
 ## Prerequisites
@@ -64,12 +64,12 @@ class Person {
 new Person() // throws IllegalArgumentException: "Name can not be null"
 ```
 
-### Value
+### Value Object
 
-The `Value` meta-annotation combines the `Immutable` and `NonNull` annotations, which is used to assist in the creation of [value objects](https://en.wikipedia.org/wiki/Value_object).
+The `ValueObject` meta-annotation combines the `Immutable` and `NonNull` annotations, which is used to assist in the creation of [value objects](https://en.wikipedia.org/wiki/Value_object).
 
 ```groovy
-@tvinke.bulletproof.transform.Value
+@tvinke.bulletproof.transform.ValueObject
 class Money {
     BigDecimal amount
 }
