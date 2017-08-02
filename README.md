@@ -1,6 +1,6 @@
 [![Travis CI](https://img.shields.io/travis/tvinke/bulletproof.svg)](https://travis-ci.org/tvinke/bulletproof)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.tvinke/bulletproof.svg)](http://repo1.maven.org/maven2/com/github/tvinke/bulletproof/0.1/bulletproof-0.1.jar)
-[![GitHub release](https://img.shields.io/github/tag/tvinke/bulletproof.svg)](https://github.com/tvinke/bulletproof/releases/tag/v0.1)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.tvinke/bulletproof.svg)](http://repo1.maven.org/maven2/com/github/tvinke/bulletproof/0.2/bulletproof-0.2.jar)
+[![GitHub release](https://img.shields.io/github/tag/tvinke/bulletproof.svg)](https://github.com/tvinke/bulletproof/releases/tag/v0.2)
 # Bulletproof
 *Groovy AST transformations, such as @ValueObject and @NonNull, which makes constructing an instance more bullet-proof.*
 
@@ -30,12 +30,12 @@ Add the bulletproof jar to the classpath in your preferred way and you're set.
 
 ### Grape
 ```groovy
-@Grab('com.github.tvinke:bulletproof:0.1') 
+@Grab('com.github.tvinke:bulletproof:0.2') 
 ```
 
 ### Gradle
 ```groovy
-compile group: 'com.github.tvinke', name: 'bulletproof', version: '0.1'
+compile group: 'com.github.tvinke', name: 'bulletproof', version: '0.2'
 ```
 
 ### Maven
@@ -43,13 +43,13 @@ compile group: 'com.github.tvinke', name: 'bulletproof', version: '0.1'
  <dependency>
     <groupId>com.github.tvinke</groupId>
     <artifactId>bulletproof</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ```
 
 ## Annotations
 
-Consult the [bulletproof 0.1 Groovydocs](http://tvinke.github.io/bulletproof/v0.1/groovydoc/) for complete API information.
+Consult the [bulletproof 0.2 Groovydocs](http://tvinke.github.io/bulletproof/v0.2/groovydoc/) for complete API information.
 
 ### NonNull
 
