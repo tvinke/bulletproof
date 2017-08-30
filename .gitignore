@@ -5,3 +5,6 @@
 .settings
 .vscode
 build
+.idea
+bulletproof.iml
+out
