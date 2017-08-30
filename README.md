@@ -8,6 +8,8 @@
 
 Groovy has the `Immutable` annotation which allows to create immutable classes, which is a prerequisite for creating [value objects](https://en.wikipedia.org/wiki/Value_object). Unfortunately, when a class has been annotated with `Immutable` it's no longer possible to add your own constructor to verify if provided parameters are not `null`, making our value objects really bullet-proof.
 
+*See [Ted Vinke Blog: Make Your Groovy Objects More Bullet-Proof](https://tedvinke.wordpress.com/2017/08/30/make-your-groovy-objects-more-bullet-proof/)*
+
 Bulletproof helps to fill this gap by adding a few AST transformations.
  * The `NonNull` annotation which modifies every constructor to perform null-checks. Add this to an `Immutable` class and no `null` slips past your constructor.
  * The `ValueObject` meta-annotation which puts both `NonNull` and `Immutable` on your class as a convenience to do above step with one annotation.
