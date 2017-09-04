@@ -19,4 +19,4 @@ import groovy.transform.Immutable
  * @see groovy.transform.Immutable
  */
 @AnnotationCollector(value=[Immutable, NonNull])
-public @interface ValueObject { }
+@interface ValueObject { }

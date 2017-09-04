@@ -37,7 +37,7 @@ import groovy.transform.TypeCheckingMode
  */
 @CompileStatic
 @GroovyASTTransformation(phase = CompilePhase.INSTRUCTION_SELECTION)
-public class NonNullASTTransformation extends AbstractASTTransformation {
+class NonNullASTTransformation extends AbstractASTTransformation {
     
     static final Class MY_CLASS = NonNullASTTransformation.class
     static final ClassNode MY_TYPE = make(MY_CLASS)
@@ -48,37 +48,37 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
     private static final String NON_NULL_PROPERTY_NODE_METADATA_KEY = 'NON_NULL_PROPERTY_NODE_METADATA_KEY'
     
     @Override
-    public void visit(ASTNode[] nodes, SourceUnit source) {
-        init(nodes, source);
-        AnnotatedNode parent = (AnnotatedNode) nodes[1];
-        AnnotationNode annotation = (AnnotationNode) nodes[0];
+    void visit(ASTNode[] nodes, SourceUnit source) {
+        init(nodes, source)
+        AnnotatedNode parent = (AnnotatedNode) nodes[1]
+        AnnotationNode annotation = (AnnotationNode) nodes[0]
         if (parent instanceof ClassNode) {
-            modifyClass(parent);
+            modifyClass(parent)
         } else {
-            addError("@NonNull may only be applied on the class level", annotation);
+            addError("@NonNull may only be applied on the class level", annotation)
         }
     }
     
     protected void init(ASTNode[] nodes, SourceUnit sourceUnit) {
         if (nodes == null || nodes.length != 2 || !(nodes[0] instanceof AnnotationNode) || !(nodes[1] instanceof AnnotatedNode)) {
-            throw new GroovyBugError("Internal error: expecting [AnnotationNode, AnnotatedNode] but got: " + (nodes == null ? null : Arrays.asList(nodes)));
+            throw new GroovyBugError("Internal error: expecting [AnnotationNode, AnnotatedNode] but got: " + (nodes == null ? null : Arrays.asList(nodes)))
         }
-        this.sourceUnit = sourceUnit;
+        this.sourceUnit = sourceUnit
     }
-    
-    public void modifyClass(ClassNode classNode) {
-        boolean force = true;
+
+    void modifyClass(ClassNode classNode) {
+        boolean force = true
         // no processing if existing constructors found
         
-        List<ConstructorNode> constructors = classNode.getDeclaredConstructors();
-        
-        if (constructors.size() > 1 && !force) return;
-        boolean foundEmpty = constructors.size() == 1 && constructors.get(0).getFirstStatement() == null;
-        
+        List<ConstructorNode> constructors = classNode.getDeclaredConstructors()
+
+        if (constructors.size() > 1 && !force) return
+        boolean foundEmpty = constructors.size() == 1 && constructors.get(0).getFirstStatement() == null
+
         // proceed by adjusting class
-        final List<PropertyNode> properties = getInstanceProperties(classNode);
-        boolean specialHashMapCase = properties.size() == 1 && properties.get(0).getField().getType().equals(HASHMAP_TYPE);
-        
+        final List<PropertyNode> properties = getInstanceProperties(classNode)
+        boolean specialHashMapCase = properties.size() == 1 && properties.get(0).getField().getType() == HASHMAP_TYPE
+
         final List<MethodNode> addedMethods = createCheckMethods(properties)
         addUberCheckMethodToClass(classNode, createUberCheckerMethod(addedMethods))
         addCheckMethodsToClass(classNode, addedMethods)
@@ -97,7 +97,7 @@ public class NonNullASTTransformation extends AbstractASTTransformation {
         for (ConstructorNode constructor : classNode.getDeclaredConstructors()) {
             def code = constructor.getCode()
             if (constructor.code instanceof BlockStatement) {
-                List<Statement> existingStatements = ((BlockStatement)constructor.code).getStatements();
+                List<Statement> existingStatements = ((BlockStatement)constructor.code).getStatements()
                 existingStatements.add uberCheckerCallingStatement
             } else if (constructor.code instanceof ExpressionStatement) {
                 // no-op
