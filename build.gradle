@@ -1,117 +1,124 @@
-apply plugin: 'groovy'
-apply plugin: 'jacoco'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'project-report'
+allprojects {
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'signing'
+    apply plugin: 'project-report'
 
-group = 'com.github.tvinke'
-archivesBaseName = 'bulletproof'
-version = '0.2'
-
-jar.archiveName = "bulletproof-${version}.jar"
-
-repositories {
-    jcenter()
+    group = 'com.github.tvinke'
+    archivesBaseName = 'bulletproof'
+    version = '0.2'
 }
 
-dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.9'
+//jar.archiveName = "bulletproof-${version}.jar"
 
-    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
-}
+subprojects {
+    apply plugin: 'groovy'
+    apply plugin: 'jacoco'
+    apply plugin: 'maven'
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from groovydoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-if (project.hasProperty('sign')) {
-    signing {
-        sign configurations.archives
+    repositories {
+        jcenter()
     }
-}
-
-jacoco {
-    toolVersion = '0.7.9'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled false
-        csv.enabled false
-        html {
-            enabled true
-            destination "${buildDir}/reports/jacoco"
+    
+    dependencies {
+        compile 'org.codehaus.groovy:groovy-all:2.4.9'
+    
+        testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    }
+    
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from groovydoc
+    }
+    
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+    
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+    
+    if (project.hasProperty('sign')) {
+        signing {
+            sign configurations.archives
         }
     }
-}
-
-groovydoc {
-    // Set document and window titles.
-    docTitle = "Bulletproof"
-    windowTitle = "Bulletproof $version API"
-    use = false
-
-    header = """\
-        <h2>Bulletproof API $version</h2>
-        """.stripIndent()
-     
-    footer = """\
-        <div class="custom-footer">
-            Generated on: ${new Date().format('yyyy-MM-dd HH:mm:ss')}
-        </div>""".stripIndent()
-}
-
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      if (project.hasProperty('sign')) {
-          beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-      }
-
-      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
-      }
-
-      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
-      }
-
-      pom.project {
-        name 'bulletproof'
-        packaging 'jar'
-        description 'Groovy AST transformations, such as @ValueObject and @NonNull, which makes constructing an instance more bullet-proof'
-        url 'https://github.com/tvinke/bulletproof'
-
-        scm {
-          connection 'scm:git:git://github.com//tvinke/bulletproof.git'
-          developerConnection 'scm:git:ssh://github.com:tvinke/bulletproof.git'
-          url 'https://github.com/tvinke/bulletproof/tree/master'
+    
+    jacoco {
+        toolVersion = '0.7.9'
+    }
+    
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html {
+                enabled true
+                destination "${buildDir}/reports/jacoco"
+            }
         }
-
-        licenses {
-          license {
-            name 'The Apache License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    }
+    
+    groovydoc {
+        // Set document and window titles.
+        docTitle = "Bulletproof"
+        windowTitle = "Bulletproof $version API"
+        use = false
+    
+        header = """\
+            <h2>Bulletproof API $version</h2>
+            """.stripIndent()
+         
+        footer = """\
+            <div class="custom-footer">
+                Generated on: ${new Date().format('yyyy-MM-dd HH:mm:ss')}
+            </div>""".stripIndent()
+    }
+    
+    uploadArchives {
+      repositories {
+        mavenDeployer {
+          if (project.hasProperty('sign')) {
+              beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+          }
+    
+          repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
+          }
+    
+          snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            authentication(userName: findProperty('ossrhUsername'), password: findProperty('ossrhPassword'))
+          }
+    
+          pom.project {
+            name 'bulletproof'
+            packaging 'jar'
+            description 'Groovy AST transformations, such as @ValueObject and @NonNull, which makes constructing an instance more bullet-proof'
+            url 'https://github.com/tvinke/bulletproof'
+    
+            scm {
+              connection 'scm:git:git://github.com//tvinke/bulletproof.git'
+              developerConnection 'scm:git:ssh://github.com:tvinke/bulletproof.git'
+              url 'https://github.com/tvinke/bulletproof/tree/master'
+            }
+    
+            licenses {
+              license {
+                name 'The Apache License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+              }
+            }
+    
+            developers {
+              developer {
+                id 'tvinke'
+                name 'Ted Vinke'
+              }
+            }
           }
         }
-
-        developers {
-          developer {
-            id 'tvinke'
-            name 'Ted Vinke'
-          }
-        }
       }
     }
-  }
 }
