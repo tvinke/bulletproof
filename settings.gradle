@@ -1,2 +1,2 @@
 rootProject.name = 'bulletproof'
-include 'bulletproof-core'
+include 'bulletproof-core', 'bulletproof-grails'

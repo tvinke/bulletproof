@@ -1,10 +1,12 @@
 /.gradle/
-/bin/
+bin/
 .classpath
 .project
 .settings
 .vscode
-build
+build/
 .idea
-bulletproof.iml
-out
+out/
+*.ipr
+*.iws
+*.iml

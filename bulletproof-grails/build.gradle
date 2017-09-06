@@ -1,0 +1,18 @@
+
+description = "Bulletproof's Grails module allows to interact with the Grails framework."
+
+def grailsVersion = "3.3.0"
+
+repositories {
+    maven { url 'https://repo.grails.org/grails/core' }
+}
+
+dependencies {
+    compile project(':bulletproof-core')
+    testCompile project(':bulletproof-core').sourceSets.test.output
+    compile "org.grails:grails-plugin-validation:$grailsVersion"
+    // FIXME if we won't include servlet-api in compilation-scope, we'll get java.lang.NoClassDefFoundError:
+    // Unable to load class org.grails.web.servlet.HttpServletRequestExtension due to missing
+    // dependency javax/servlet/ServletRequest
+    compile "javax.servlet:servlet-api:2.5"
+}

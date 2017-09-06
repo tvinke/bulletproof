@@ -5,11 +5,8 @@ allprojects {
     apply plugin: 'project-report'
 
     group = 'com.github.tvinke'
-    archivesBaseName = 'bulletproof'
-    version = '0.2'
+    version = '0.3-SNAPSHOT'
 }
-
-//jar.archiveName = "bulletproof-${version}.jar"
 
 subprojects {
     apply plugin: 'groovy'
