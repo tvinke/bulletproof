@@ -48,22 +48,52 @@ class ValidSpec extends GroovyShellSpec {
             import grails.validation.Validateable
             import tvinke.bulletproof.grails.validation.Valid
             @Valid
-            class Person implements Validateable {
-                String name
-                int age
+            class User implements Validateable {
+                String login
+                String password
+                String email
+                Integer age
                 
                 static constraints = {
+                    login size: 5..15, blank: false, unique: true
+                    password size: 5..15, blank: false
+                    email email: true, blank: false
                     age min: 18
                 }
             }
-            new Person()
+            new User(login: 'tim123', 
+                password: 'ssht', 
+                age: 15, 
+                email: 'invalid')
         """)
 
         then:
         ex = thrown()
-        ex.errors.errorCount == 2
-        ex.errors['name'].code == 'nullable'
+        ex.errors.errorCount == 3
+        ex.errors['password'].code == 'size.toosmall'
+        ex.errors['email'].code == 'email.invalid'
         ex.errors['age'].code == 'min.notmet'
+    }
+
+    def "@Valid should fail creation invalid object using custom Map constructor"() {
+
+        when: "invalid object is created"
+        evaluate("""
+            import grails.validation.Validateable
+            import tvinke.bulletproof.grails.validation.Valid
+            @Valid
+            class Person implements Validateable {
+                String name
+                Person(Map props) { this.name = props?.name }
+            }
+            new Person(name: 'tim') // ok
+            new Person() // fails
+        """)
+
+        then:
+        ValidationException ex = thrown()
+        def errors = ex.errors
+        errors['name'].code == 'nullable'
     }
 
 
@@ -78,14 +108,14 @@ class ValidSpec extends GroovyShellSpec {
                 String name
                 Person(String name) { this.name = name }
             }
-            new Person()
+            new Person('tim') // ok
+            new Person() // fails
         """)
 
         then:
         ValidationException ex = thrown()
         def errors = ex.errors
         errors['name'].code == 'nullable'
-        errors['name'].defaultMessage == 'Property [{0}] of class [{1}] cannot be null'
     }
 
     def "@Valid should validate at the end of any existing constructors"() {
@@ -118,7 +148,7 @@ class ValidSpec extends GroovyShellSpec {
             class Person implements Validateable {
                 String first, last
             }
-            new Person('Tim')
+            new Person('Tim') // missing 'last', fails
         """)
 
         then:
